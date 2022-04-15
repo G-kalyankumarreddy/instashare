@@ -3,6 +3,9 @@ import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
 import Header from '../Header'
 import UserStories from '../UserStories'
+import UserPosts from '../PostsRoute'
+
+import './index.css'
 
 const userStoryApiStatus = {
   initial: 'INITIAL',
@@ -57,7 +60,7 @@ class Home extends Component {
   }
 
   renderUserStories = () => {
-    const {userStoriesList, userStoriesApistatus} = this.state
+    const {userStoriesApistatus} = this.state
     switch (userStoriesApistatus) {
       case userStoryApiStatus.inProgress:
         return this.renderLoader()
@@ -84,7 +87,10 @@ class Home extends Component {
     return (
       <>
         <Header />
-        <div className="home-page-container">{this.renderUserStories()}</div>
+        <div className="home-page-container">
+          {this.renderUserStories()}
+          <UserPosts />
+        </div>
       </>
     )
   }

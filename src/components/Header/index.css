@@ -1,6 +1,6 @@
 .navbar-container {
   display: flex;
-  background: #ffffff;
+  background-color: #fafafa;
   padding: 20px;
   justify-content: space-between;
   height: 60px;
@@ -13,7 +13,6 @@
 .logo-and-title-container {
   display: flex;
   flex-direction: row;
-
   align-items: center;
 }
 
@@ -50,7 +49,6 @@
   list-style-type: none;
   padding-left: 0px;
   display: flex;
-
   width: 50%;
   justify-content: space-between;
 }
@@ -90,7 +88,6 @@
   line-height: 18px;
   margin-top: auto;
   margin-right: 20px;
-
   color: #262626;
 }
 

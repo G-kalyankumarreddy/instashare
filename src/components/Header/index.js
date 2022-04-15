@@ -2,12 +2,13 @@ import {Component} from 'react'
 import {withRouter, Link} from 'react-router-dom'
 import Cookies from 'js-cookie'
 import {BiMenu} from 'react-icons/bi'
+import {FaSearch} from 'react-icons/fa'
 import {AiFillCloseCircle} from 'react-icons/ai'
 
 import './index.css'
 
 class Header extends Component {
-  state = {displayMenu: false}
+  state = {displayMenu: false, searchInput: ''}
 
   // To logout from the account
   onClickLogoutButton = () => {
@@ -16,27 +17,30 @@ class Header extends Component {
     history.replace('/login')
   }
 
-  optionsListContainer = () => (
-    <ul className="header-options-container">
-      <Link to="/" className="link-style">
-        {' '}
-        <li className="options-style">Home</li>
-      </Link>
-      <Link to="/profile" className="link-style">
-        {' '}
-        <li className="options-style">Profile</li>
-      </Link>
+  optionsListAndSearchInputContainer = () => (
+    <>
+      {this.renderSearchInput()}
+      <ul className="header-options-container">
+        <Link to="/" className="link-style">
+          {' '}
+          <li className="options-style">Home</li>
+        </Link>
+        <Link to="/profile" className="link-style">
+          {' '}
+          <li className="options-style">Profile</li>
+        </Link>
 
-      <li className="button-list-item">
-        <button
-          type="button"
-          className="logout-button"
-          onClick={this.onClickLogoutButton}
-        >
-          Logout
-        </button>
-      </li>
-    </ul>
+        <li className="button-list-item">
+          <button
+            type="button"
+            className="logout-button"
+            onClick={this.onClickLogoutButton}
+          >
+            Logout
+          </button>
+        </li>
+      </ul>
+    </>
   )
 
   onClickMenuIcon = () => {
@@ -91,6 +95,34 @@ class Header extends Component {
     </ul>
   )
 
+  onChangeSearchInput = event => {
+    this.setState({searchInput: event.target.value})
+  }
+
+  renderSearchInput = () => {
+    const {searchInput} = this.state
+    return (
+      <div className="search-input-and-icon-container">
+        <input
+          type="search"
+          value={searchInput}
+          onChange={this.onChangeSearchInput}
+        />
+        <button
+          className="search-button"
+          type="button"
+          onClick={this.onClickSearchIcon}
+        >
+          <FaSearch />
+        </button>
+      </div>
+    )
+  }
+
+  onClickSearchIcon = () => {
+    this.fetchSearchPosts()
+  }
+
   render() {
     const {displayMenu} = this.state
     return (
@@ -104,7 +136,7 @@ class Header extends Component {
             />
             <h1 className="header-instashare-title">Insta Share</h1>
           </div>
-          {this.optionsListContainer()}
+          {this.optionsListAndSearchInputContainer()}
           {this.smallerDevicesMenuIcon()}
         </nav>
         {displayMenu && this.smallerDevicesMenu()}

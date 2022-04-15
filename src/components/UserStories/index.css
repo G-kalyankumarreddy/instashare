@@ -1,7 +1,8 @@
 .slider-container {
-  width: 85%;
+  width: 78%;
   padding-top: 15px;
   margin: auto;
+  background-color: transparent;
 }
 
 .user-story-image-and-name-container {
@@ -9,8 +10,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .user-story-image {
