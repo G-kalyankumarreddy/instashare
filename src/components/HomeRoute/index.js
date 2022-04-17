@@ -17,7 +17,7 @@ const userStoryApiStatus = {
 class Home extends Component {
   state = {
     userStoriesList: [],
-    userStoriesApistatus: userStoryApiStatus.initial,
+    userStoriesApiStatus: userStoryApiStatus.initial,
   }
 
   componentDidMount() {
