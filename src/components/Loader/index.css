@@ -1,0 +1,10 @@
+.loader-container {
+  background-color: #fafafa;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px red solid;
+}

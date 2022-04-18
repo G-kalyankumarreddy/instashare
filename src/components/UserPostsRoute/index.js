@@ -13,7 +13,12 @@ const userPostsApiConstants = {
 }
 
 class UserPosts extends Component {
-  state = {userPostsList: [], apiStatus: userPostsApiConstants.initial}
+  state = {
+    userPostsList: [],
+    apiStatus: userPostsApiConstants.initial,
+    likesCount: '',
+    postId: '',
+  }
 
   componentDidMount() {
     this.fetchUserPosts()
@@ -35,6 +40,7 @@ class UserPosts extends Component {
     profilePic: post.profile_pic,
     userId: post.user_id,
     userName: post.user_name,
+    likeStatus: false,
   })
 
   fetchUserPosts = async () => {
@@ -50,9 +56,11 @@ class UserPosts extends Component {
     const response = await fetch(userPostsUrl, options)
     if (response.ok) {
       const data = await response.json()
+
       const updatedPostsDataFormat = data.posts.map(each =>
         this.updatePostsDataFormat(each),
       )
+      console.log(updatedPostsDataFormat)
       this.setState({
         apiStatus: userPostsApiConstants.success,
         userPostsList: updatedPostsDataFormat,
@@ -62,12 +70,26 @@ class UserPosts extends Component {
     }
   }
 
+  increaseLikeCount = postId => {
+    this.setState({postId})
+  }
+
+  decreaseLikeCount = postId => {
+    this.setState({postId})
+  }
+
   onSuccessRenderUserPosts = () => {
-    const {userPostsList} = this.state
+    const {userPostsList, postId} = this.state
     return (
       <ul className="post-list-container">
         {userPostsList.map(each => (
-          <UserPostItem key={each.userId} postItem={each} />
+          <UserPostItem
+            key={each.userId}
+            postItem={each}
+            increaseLikeCount={this.increaseLikeCount}
+            decreaseLikeCount={this.decreaseLikeCount}
+            isLiked={each.postId === postId}
+          />
         ))}
       </ul>
     )

@@ -3,7 +3,7 @@ import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
 import Header from '../Header'
 import UserStories from '../UserStories'
-import UserPosts from '../PostsRoute'
+import UserPosts from '../UserPostsRoute'
 
 import './index.css'
 

@@ -79,6 +79,77 @@
     border: 1px solid #dbdbdb;
   }
 }
+
+.like-comment-and-share-icon-container {
+  display: flex;
+}
+
+.like-buttons {
+  border: none;
+  background-color: transparent;
+}
+
+.heart-icon {
+  height: 17.083982467651367px;
+  width: 19.403348922729492px;
+  color: #262626;
+}
+
+@media screen and (min-width: 576px) {
+  .heart-icon {
+    height: 16.873313903808594px;
+    width: 19.832109451293945px;
+  }
+}
+
+.like-icon {
+  height: 17.083982467651367px;
+  width: 19.403348922729492px;
+}
+
+@media screen and (min-width: 576px) {
+  .like-icon {
+    height: 20px;
+    width: 23.241853713989258px;
+  }
+}
+
+.comment-icon {
+  height: 19px;
+  width: 23px;
+  color: #475569;
+}
+
+@media screen and (min-width: 576px) {
+  .comment-icon {
+    height: 19.386981964111328px;
+    width: 22px;
+  }
+}
+
+.share-icon {
+  height: 21px;
+  width: 21px;
+  color: #475569;
+}
+
+.likes-count {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: -0.07px;
+  color: #262626;
+}
+
+@media screen and (min-width: 576px) {
+  .likes-count {
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
 .post-image-style {
   width: 100%;
 }

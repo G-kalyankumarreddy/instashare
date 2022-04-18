@@ -1,4 +1,5 @@
 import {BsGrid3X3} from 'react-icons/bs'
+import {FaCamera} from 'react-icons/fa'
 import './index.css'
 
 const ProfileCard = props => {
@@ -10,6 +11,7 @@ const ProfileCard = props => {
     storyAlt,
     postAlt,
   } = props
+
   const {
     followersCount,
     followingCount,
@@ -19,7 +21,15 @@ const ProfileCard = props => {
     userId,
     userName,
   } = profileDetails
-  console.log(profileDetails)
+
+  const noPostsView = () => (
+    <div className="no-posts-container">
+      <div className="camera-icon-container">
+        <FaCamera className="camera-icon-style" />
+      </div>
+      <p className="no-posts-description">No Posts yet</p>
+    </div>
+  )
 
   return (
     <div className="profile-card-container">
@@ -78,17 +88,21 @@ const ProfileCard = props => {
           <BsGrid3X3 className="post-icon" />
           <h1 className="posts-title">Posts</h1>
         </div>
-        <ul className="posts-list-container">
-          {posts.map(each => (
-            <li key={each.id}>
-              <img
-                src={each.image}
-                alt={postAlt}
-                className="post-image-styling"
-              />
-            </li>
-          ))}
-        </ul>
+        {stories.length === 0 ? (
+          noPostsView()
+        ) : (
+          <ul className="posts-list-container">
+            {posts.map(each => (
+              <li key={each.id}>
+                <img
+                  src={each.image}
+                  alt={postAlt}
+                  className="post-image-styling"
+                />
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   )

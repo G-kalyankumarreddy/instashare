@@ -314,3 +314,58 @@
     height: 330px;
   }
 }
+.no-posts-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  background-color: #fafafa;
+}
+
+.camera-icon-container {
+  height: 48px;
+  width: 48px;
+  border: 2px solid #262626;
+  border-radius: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 100px;
+}
+
+@media screen and (min-width: 576px) {
+  .camera-icon-container {
+    width: 86px;
+    height: 86px;
+    border-radius: 43px;
+  }
+}
+
+.camera-icon-style {
+  height: 26.790693283081055px;
+  width: 29.023250579833984px;
+  color: #262626;
+}
+
+@media screen and (min-width: 576px) {
+  .camera-icon-style {
+    height: 45px;
+    width: 48px;
+  }
+}
+
+.no-posts-description {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 18px;
+  line-height: 24px;
+  color: #262626;
+}
+
+@media screen and (min-width: 576px) {
+  .no-posts-description {
+    font-size: 32px;
+    line-height: 48px;
+  }
+}

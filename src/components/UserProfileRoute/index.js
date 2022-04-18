@@ -1,9 +1,9 @@
 import {Component} from 'react'
-import Loader from 'react-loader-spinner'
 import Cookies from 'js-cookie'
-import {BsGrid3X3} from 'react-icons/bs'
 import Header from '../Header'
+import LoaderView from '../Loader'
 import ProfileCard from '../ProfileCard'
+import FailureView from '../FailureView'
 
 const userProfileApiConstants = {
   initial: 'INITIAL',
@@ -70,26 +70,55 @@ class UserProfile extends Component {
     }
   }
 
-  renderLoader = () => (
-    <div className="loader-container" testid="loader">
-      <Loader type="TailSpin" color="#4094EF" height={50} width={50} />
-    </div>
+  userProfileOnSuccess = () => {
+    const {userProfileDetails, userStories, userPosts} = this.state
+    return (
+      <ProfileCard
+        profileDetails={userProfileDetails}
+        stories={userStories}
+        posts={userPosts}
+        profileAlt="user profile"
+        postAlt="user post"
+        storyAlt="user story"
+      />
+    )
+  }
+
+  onClickTryFetchUserProfile = () => {
+    this.getUserProfileDetails()
+  }
+
+  userProfileOnFailure = () => (
+    <FailureView>
+      <button
+        type="button"
+        className="try-again-button"
+        onClick={this.onClickTryFetchUserProfile}
+      >
+        Try Again
+      </button>
+    </FailureView>
   )
 
-  render() {
-    const {userProfileDetails, userStories, userPosts} = this.state
+  renderUserProfilePage = () => {
+    const {userProfileApiStatus} = this.state
+    switch (userProfileApiStatus) {
+      case userProfileApiConstants.inProgress:
+        return <LoaderView />
+      case userProfileApiConstants.success:
+        return this.userProfileOnSuccess()
+      case userProfileApiConstants.failure:
+        return this.userProfileOnFailure()
+      default:
+        return null
+    }
+  }
 
+  render() {
     return (
       <>
         <Header />
-        <ProfileCard
-          profileDetails={userProfileDetails}
-          stories={userStories}
-          posts={userPosts}
-          profileAlt="user profile"
-          postAlt="user post"
-          storyAlt="user story"
-        />
+        {this.renderUserProfilePage()}
       </>
     )
   }

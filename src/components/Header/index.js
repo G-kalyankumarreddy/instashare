@@ -25,7 +25,7 @@ class Header extends Component {
           {' '}
           <li className="options-style">Home</li>
         </Link>
-        <Link to="/profile" className="link-style">
+        <Link to="/my-profile" className="link-style">
           {' '}
           <li className="options-style">Profile</li>
         </Link>
@@ -64,11 +64,11 @@ class Header extends Component {
 
   smallerDevicesMenu = () => (
     <ul className="smaller-devices-header-options-container">
-      <Link to="Home" className="link-style">
+      <Link to="/" className="link-style">
         {' '}
         <li className="options-style">Home</li>
       </Link>
-      <Link to="/profile" className="link-style">
+      <Link to="/my-profile" className="link-style">
         {' '}
         <li className="options-style">Profile</li>
       </Link>
