@@ -8,7 +8,27 @@ import {AiFillCloseCircle} from 'react-icons/ai'
 import './index.css'
 
 class Header extends Component {
-  state = {displayMenu: false, searchInput: ''}
+  state = {displayMenu: false, searchInput: '', searchList: []}
+
+  componentDidMount() {
+    this.getSearchResults()
+  }
+
+  getSearchResults = async () => {
+    const {searchInput} = this.state
+    const token = Cookies.get('jwt_token')
+    const searchApiUrl = `https://apis.ccbp.in/insta-share/posts?search=${searchInput}`
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+    const response = await fetch(searchApiUrl, options)
+    const data = await response.json()
+    console.log(data)
+  }
 
   // To logout from the account
   onClickLogoutButton = () => {
@@ -99,8 +119,12 @@ class Header extends Component {
     this.setState({searchInput: event.target.value})
   }
 
+  onClickSearchIcon = () => {
+    this.getSearchResults()
+  }
+
   renderSearchInput = () => {
-    const {searchInput} = this.state
+    const {searchInput} = this.props
     return (
       <div className="search-input-and-icon-container">
         <input
@@ -117,10 +141,6 @@ class Header extends Component {
         </button>
       </div>
     )
-  }
-
-  onClickSearchIcon = () => {
-    this.fetchSearchPosts()
   }
 
   render() {

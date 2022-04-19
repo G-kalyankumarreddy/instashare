@@ -1,5 +1,6 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
+import LoaderView from '../Loader'
 
 import './index.css'
 
@@ -15,9 +16,7 @@ const userPostsApiConstants = {
 class UserPosts extends Component {
   state = {
     userPostsList: [],
-    apiStatus: userPostsApiConstants.initial,
-    likesCount: '',
-    postId: '',
+    userPostsApiStatus: userPostsApiConstants.initial,
   }
 
   componentDidMount() {
@@ -44,7 +43,7 @@ class UserPosts extends Component {
   })
 
   fetchUserPosts = async () => {
-    this.setState({apiStatus: userPostsApiConstants.inProgress})
+    this.setState({userPostsApiStatus: userPostsApiConstants.inProgress})
     const userPostsUrl = 'https://apis.ccbp.in/insta-share/posts'
     const token = Cookies.get('jwt_token')
     const options = {
@@ -60,43 +59,140 @@ class UserPosts extends Component {
       const updatedPostsDataFormat = data.posts.map(each =>
         this.updatePostsDataFormat(each),
       )
-      console.log(updatedPostsDataFormat)
+
       this.setState({
-        apiStatus: userPostsApiConstants.success,
+        userPostsApiStatus: userPostsApiConstants.success,
         userPostsList: updatedPostsDataFormat,
       })
     } else {
-      this.setState({apiStatus: userPostsApiConstants.failure})
+      this.setState({userPostsApiStatus: userPostsApiConstants.failure})
     }
   }
 
-  increaseLikeCount = postId => {
-    this.setState({postId})
+  decreaseLikeCount = async postId => {
+    const {userPostsList} = this.state
+    const token = Cookies.get('jwt_token')
+    const postlikeUrl = `https://apis.ccbp.in/insta-share/posts/${postId}/like`
+
+    const disLikedPost = userPostsList.filter(each => each.postId === postId)
+    const updatedLikedPost = {...disLikedPost[0], likeStatus: false}
+    const isDisLiked = {like_status: updatedLikedPost.likeStatus}
+    const options = {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(isDisLiked),
+    }
+
+    const response = await fetch(postlikeUrl, options)
+
+    if (response.ok) {
+      const updatedUserPostsList = userPostsList.map(each => {
+        if (each.postId === postId) {
+          const postDisLiked = {
+            ...each,
+            likeStatus: false,
+            likesCount: each.likesCount - 1,
+          }
+          return postDisLiked
+        }
+        return each
+      })
+      this.setState({userPostsList: updatedUserPostsList})
+    }
   }
 
-  decreaseLikeCount = postId => {
-    this.setState({postId})
+  increaseLikeCount = async postId => {
+    const {userPostsList} = this.state
+    const token = Cookies.get('jwt_token')
+    const postlikeUrl = `https://apis.ccbp.in/insta-share/posts/${postId}/like`
+
+    const likedPost = userPostsList.filter(each => each.postId === postId)
+    const updatedLikedPost = {...likedPost[0], likeStatus: true}
+    const isLiked = {like_status: updatedLikedPost.likeStatus}
+    const options = {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(isLiked),
+    }
+
+    const response = await fetch(postlikeUrl, options)
+    if (response.ok) {
+      const updatedUserPostsList = userPostsList.map(each => {
+        if (each.postId === postId) {
+          const postLiked = {
+            ...each,
+            likeStatus: true,
+            likesCount: each.likesCount + 1,
+          }
+          return postLiked
+        }
+        return each
+      })
+      this.setState({userPostsList: updatedUserPostsList})
+    }
   }
 
-  onSuccessRenderUserPosts = () => {
-    const {userPostsList, postId} = this.state
+  onSuccessUserPosts = () => {
+    const {userPostsList} = this.state
+
     return (
       <ul className="post-list-container">
         {userPostsList.map(each => (
           <UserPostItem
-            key={each.userId}
+            key={each.postId}
             postItem={each}
             increaseLikeCount={this.increaseLikeCount}
             decreaseLikeCount={this.decreaseLikeCount}
-            isLiked={each.postId === postId}
           />
         ))}
       </ul>
     )
   }
 
+  onFailureUserPosts = () => (
+    <div className="home-failure-view-container">
+      <img
+        src="https://res.cloudinary.com/kalyankumar/image/upload/v1650354873/instashare/somethingWentWrong_hcvwkz.png"
+        alt="failure view"
+        className="home-failure-image"
+      />
+      <h1 className="home-failure-title">
+        Something went wrong. Please try again
+      </h1>
+      <button
+        className="home-try-again-button"
+        type="button"
+        onClick={this.onClickRetryButton}
+      >
+        Try Again
+      </button>
+    </div>
+  )
+
+  onClickRetryButton = () => {
+    this.fetchUserPosts()
+  }
+
+  renderUserPosts = () => {
+    const {userPostsApiStatus} = this.state
+    switch (userPostsApiStatus) {
+      case userPostsApiConstants.inProgress:
+        return <LoaderView />
+      case userPostsApiConstants.failure:
+        return this.onFailureUserPosts()
+      case userPostsApiConstants.success:
+        return this.onSuccessUserPosts()
+      default:
+        return null
+    }
+  }
+
   render() {
-    return this.onSuccessRenderUserPosts()
+    return <div>{this.renderUserPosts()}</div>
   }
 }
 

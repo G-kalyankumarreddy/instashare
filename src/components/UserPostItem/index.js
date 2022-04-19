@@ -7,8 +7,8 @@ import {FcLike} from 'react-icons/fc'
 import './index.css'
 
 const UserPostItem = props => {
-  const {postItem, isLiked, increaseLikeCount, decreaseLikeCount} = props
-  console.log(isLiked)
+  const {postItem, increaseLikeCount, decreaseLikeCount} = props
+
   const {
     comments,
     createdAt,
@@ -23,11 +23,11 @@ const UserPostItem = props => {
   const {caption, imageUrl} = postDetails
 
   const onClickLikeIcon = () => {
-    increaseLikeCount(postId)
+    decreaseLikeCount(postId)
   }
 
   const onClickHeartIcon = () => {
-    decreaseLikeCount(postId)
+    increaseLikeCount(postId)
   }
 
   return (
@@ -49,11 +49,19 @@ const UserPostItem = props => {
       <div className="likes-icons-caption-and-comments-container">
         <div className="like-comment-and-share-icon-container">
           {likeStatus ? (
-            <button className="like-buttons" onClick={onClickLikeIcon}>
+            <button
+              className="like-buttons"
+              type="button"
+              onClick={onClickLikeIcon}
+            >
               <FcLike className="like-icon" />
             </button>
           ) : (
-            <button className="like-buttons" onClick={onClickHeartIcon}>
+            <button
+              className="like-buttons"
+              type="button"
+              onClick={onClickHeartIcon}
+            >
               <BsHeart className="heart-icon" />
             </button>
           )}
