@@ -138,7 +138,7 @@ class UserPosts extends Component {
 
   onSuccessUserPosts = () => {
     const {userPostsList} = this.state
-    const {increaseLikeCount, decreaseLikeCount} = this.props
+
     return (
       <ul className="post-list-container">
         {userPostsList.map(each => (

@@ -94,9 +94,7 @@ class Home extends Component {
       },
       body: JSON.stringify(isLiked),
     }
-
     const response = await fetch(postlikeUrl, options)
-    const data = response.json()
     if (response.ok) {
       const updatedUserPostsList = searchPostsList.map(each => {
         if (each.postId === postId) {
@@ -154,7 +152,7 @@ class Home extends Component {
         className="search-not-found-image"
         alt="search not found"
       />
-      <h1 className="search-not-found-heading">Search Not Found"</h1>
+      <h1 className="search-not-found-heading">Search Not Found</h1>
       <p className="search-not-found-description">
         Try different keyword or search again
       </p>
@@ -230,7 +228,7 @@ class Home extends Component {
   }
 
   render() {
-    const {searchInput, displaySearchPosts, searchPostsList} = this.state
+    const {searchInput, displaySearchPosts} = this.state
 
     return (
       <>
