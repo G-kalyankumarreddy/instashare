@@ -1,16 +1,9 @@
 import {BsGrid3X3} from 'react-icons/bs'
-import {FaCamera} from 'react-icons/fa'
+import {BiCamera} from 'react-icons/bi'
 import './index.css'
 
 const ProfileCard = props => {
-  const {
-    profileDetails,
-    posts,
-    stories,
-    profileImageAlt,
-    storyAlt,
-    postAlt,
-  } = props
+  const {profileDetails, posts, stories, profileAlt, storyAlt, postAlt} = props
 
   const {
     followersCount,
@@ -23,26 +16,26 @@ const ProfileCard = props => {
   } = profileDetails
 
   const noPostsView = () => (
-    <div className="no-posts-container">
+    <div className="no-posts-container" testid="noPosts">
       <div className="camera-icon-container">
-        <FaCamera className="camera-icon-style" />
+        <BiCamera className="camera-icon-style" />
       </div>
-      <p className="no-posts-description">No Posts yet</p>
+      <h1 className="no-posts-description">No Posts</h1>
     </div>
   )
 
   return (
-    <div className="profile-card-container">
+    <div className="profile-card-container" testid="profile">
       <div className="profile-container">
-        <h1 className="user-name-styling-small-screens">{userName}</h1>
+        <h1 className="user-name-styling-small-screens" testid="username">
+          {userName}
+        </h1>
         <div className="profile-details-and-profile-pic-container">
-          <img
-            src={profilePic}
-            alt={profileImageAlt}
-            className="profile-image"
-          />
+          <img src={profilePic} alt={profileAlt} className="profile-image" />
           <div className="profile-name-id-and-follow-details-container">
-            <h1 className="user-name-styling-medium-screens ">{userName}</h1>
+            <h1 className="user-name-styling-medium-screens" testid="username">
+              {userName}
+            </h1>
             <div className="user-following-details-counter">
               <div className="counts-container">
                 <p className="counts">{postsCount}</p>
@@ -58,19 +51,25 @@ const ProfileCard = props => {
               </div>
             </div>
 
-            <p className="user-id-styling user-id-display-medium-screens">
+            <p
+              className="user-id-styling user-id-display-medium-screens"
+              testid="userid"
+            >
               {userId}
             </p>
             <p className="user-bio-medium-screens">{userBio}</p>
           </div>
         </div>
         <div className="user-id-and-bio-small-screens-container">
-          <p className="user-id-styling user-id-display-small-screens">
+          <p
+            className="user-id-styling user-id-display-small-screens"
+            testid="userid"
+          >
             {userId}
           </p>
           <p className="user-bio-small-screens">{userBio}</p>
         </div>
-        <ul className="story-list-container">
+        <ul className="story-list-container" testid="myStoriesList">
           {stories.map(each => (
             <li key={each.id}>
               <div className="story-image-container">
@@ -91,7 +90,7 @@ const ProfileCard = props => {
         {stories.length === 0 ? (
           noPostsView()
         ) : (
-          <ul className="posts-list-container">
+          <ul className="posts-list-container" testid="myPostsList">
             {posts.map(each => (
               <li key={each.id}>
                 <img

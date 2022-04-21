@@ -7,27 +7,51 @@ import {AiFillCloseCircle} from 'react-icons/ai'
 
 import './index.css'
 
-class Header extends Component {
-  state = {displayMenu: false, searchInput: '', searchList: []}
+const searchPostsApiConstants = {
+  initial: 'INITIAL',
+  inProgress: 'INPROGRESS',
+  success: 'SUCCESS',
+  failure: 'FAILURE',
+}
 
-  componentDidMount() {
-    this.getSearchResults()
+class Header extends Component {
+  state = {
+    displayMenu: false,
+    searchPostsList: [],
+    searchPostsApiStatus: searchPostsApiConstants.initial,
   }
 
   getSearchResults = async () => {
-    const {searchInput} = this.state
+    const {searchInput} = this.props
+    this.setState({searchPostsApiStatus: searchPostsApiConstants.inProgress})
+    const userPostsUrl = `https://apis.ccbp.in/insta-share/posts?search=${searchInput}`
     const token = Cookies.get('jwt_token')
-    const searchApiUrl = `https://apis.ccbp.in/insta-share/posts?search=${searchInput}`
     const options = {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`,
       },
     }
+    const response = await fetch(userPostsUrl, options)
+    if (response.ok) {
+      const data = await response.json()
 
-    const response = await fetch(searchApiUrl, options)
-    const data = await response.json()
-    console.log(data)
+      const updatedPostsDataFormat = data.posts.map(each =>
+        this.updatePostsDataFormat(each),
+      )
+
+      this.setState({
+        searchPostsApiStatus: searchPostsApiConstants.success,
+        searchPostsList: updatedPostsDataFormat,
+      })
+    } else {
+      this.setState({searchPostsApiStatus: searchPostsApiConstants.failure})
+    }
+  }
+
+  onClickSearchButton = () => {
+    const {onClickingSearchButton} = this.props
+    onClickingSearchButton()
   }
 
   // To logout from the account
@@ -116,11 +140,8 @@ class Header extends Component {
   )
 
   onChangeSearchInput = event => {
-    this.setState({searchInput: event.target.value})
-  }
-
-  onClickSearchIcon = () => {
-    this.getSearchResults()
+    const {onChangingSearchInput} = this.props
+    onChangingSearchInput(event)
   }
 
   renderSearchInput = () => {
@@ -130,12 +151,15 @@ class Header extends Component {
         <input
           type="search"
           value={searchInput}
+          placeholder="Search Caption"
           onChange={this.onChangeSearchInput}
         />
+
         <button
           className="search-button"
           type="button"
-          onClick={this.onClickSearchIcon}
+          onClick={this.onClickSearchButton}
+          testid="searchIcon"
         >
           <FaSearch />
         </button>
@@ -148,14 +172,16 @@ class Header extends Component {
     return (
       <>
         <nav className="navbar-container">
-          <div className="logo-and-title-container">
-            <img
-              src="https://res.cloudinary.com/kalyankumar/image/upload/v1649413673/instashare/instashareLogo_tykspy.png"
-              alt="website logo"
-              className="header-instashare-logo"
-            />
-            <h1 className="header-instashare-title">Insta Share</h1>
-          </div>
+          <Link to="/" className="link-style">
+            <div className="logo-and-title-container">
+              <img
+                src="https://res.cloudinary.com/kalyankumar/image/upload/v1649413673/instashare/instashareLogo_tykspy.png"
+                alt="website logo"
+                className="header-instashare-logo"
+              />
+              <h1 className="header-instashare-title">Insta Share</h1>
+            </div>
+          </Link>
           {this.optionsListAndSearchInputContainer()}
           {this.smallerDevicesMenuIcon()}
         </nav>

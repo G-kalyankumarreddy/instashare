@@ -1,6 +1,8 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
 import {FaSearch} from 'react-icons/fa'
+
+import UserPostItem from '../UserPostItem'
 import './index.css'
 
 const searchPostsApiConstants = {
@@ -11,28 +13,29 @@ const searchPostsApiConstants = {
 }
 
 class SearchPosts extends Component {
-  state = {
-    searchPostsList: [],
-    searchPostsStatus: searchPostsApiConstants.initial,
-    searchInput: '',
-  }
+  onSuccessUserPosts = () => {
+    const {searchPostsList, increaseLikeCount, decreaseLikeCount} = this.props
 
-  onChangeSearchInput = event => {
-    this.setState({searchInput: event.target.value})
-  }
-
-  render() {
     return (
-      <div className="search-input-and-icon-container">
-        <input
-          type="search"
-          value={searchInput}
-          onChange={this.onChangeSearchInput}
-        />
-        <button className="search-button" type="button">
-          <FaSearch />
-        </button>
+      <div className="search-posts-page-container">
+        <h1>Search Results</h1>
+        <ul className="post-list-container">
+          {searchPostsList.map(each => (
+            <UserPostItem
+              key={each.postId}
+              postItem={each}
+              increaseLikeCount={increaseLikeCount}
+              decreaseLikeCount={decreaseLikeCount}
+            />
+          ))}
+        </ul>
       </div>
     )
   }
+
+  render() {
+    return <>{this.onSuccessUserPosts()}</>
+  }
 }
+
+export default SearchPosts

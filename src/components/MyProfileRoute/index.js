@@ -1,10 +1,9 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
+import Loader from 'react-loader-spinner'
 
 import Header from '../Header'
 import ProfileCard from '../ProfileCard'
-import LoaderView from '../Loader'
-import FailureView from '../FailureView'
 
 import './index.css'
 
@@ -24,6 +23,10 @@ class MyProfile extends Component {
   }
 
   componentDidMount() {
+    this.getMyProfileData()
+  }
+
+  componentWillUnmount() {
     this.getMyProfileData()
   }
 
@@ -79,11 +82,19 @@ class MyProfile extends Component {
   }
 
   onClickTryFetchMyProfile = () => {
-    this.getMyProfileDetails()
+    this.getMyProfileData()
   }
 
   myProfileOnFailure = () => (
-    <FailureView>
+    <div className="failure-view-container">
+      <img
+        src="https://res.cloudinary.com/kalyankumar/image/upload/v1650256709/instashare/failureImage_kbieza.png"
+        alt="failure view"
+        className="failure-image"
+      />
+      <p className="failure-view-description">
+        Something went wrong. Please try again
+      </p>
       <button
         type="button"
         className="try-again-button"
@@ -91,14 +102,26 @@ class MyProfile extends Component {
       >
         Try Again
       </button>
-    </FailureView>
+    </div>
+  )
+
+  myProfileLoading = () => (
+    <div className="loader-container" testid="loader">
+      <Loader
+        type="TailSpin"
+        className="load-spinner"
+        color="#4094EF"
+        height={50}
+        width={50}
+      />
+    </div>
   )
 
   renderMyProfilePage = () => {
     const {myProfileApiStatus} = this.state
     switch (myProfileApiStatus) {
       case myProfileApiConstants.inProgress:
-        return <LoaderView />
+        return this.myProfileLoading()
       case myProfileApiConstants.success:
         return this.myProfileOnSuccess()
       case myProfileApiConstants.failure:
@@ -110,10 +133,10 @@ class MyProfile extends Component {
 
   render() {
     return (
-      <>
+      <div testid="myProfileRoute">
         <Header />
         {this.renderMyProfilePage()}
-      </>
+      </div>
     )
   }
 }

@@ -138,7 +138,7 @@ class UserPosts extends Component {
 
   onSuccessUserPosts = () => {
     const {userPostsList} = this.state
-
+    const {increaseLikeCount, decreaseLikeCount} = this.props
     return (
       <ul className="post-list-container">
         {userPostsList.map(each => (
@@ -154,27 +154,29 @@ class UserPosts extends Component {
   }
 
   onFailureUserPosts = () => (
-    <div className="home-failure-view-container">
+    <div className="home-failure-view-container" testid="failureView">
       <img
         src="https://res.cloudinary.com/kalyankumar/image/upload/v1650354873/instashare/somethingWentWrong_hcvwkz.png"
         alt="failure view"
         className="home-failure-image"
       />
-      <h1 className="home-failure-title">
+      <p className="home-failure-title">
         Something went wrong. Please try again
-      </h1>
+      </p>
       <button
         className="home-try-again-button"
         type="button"
-        onClick={this.onClickRetryButton}
+        onClick={this.onClickTryAgainButton}
       >
         Try Again
       </button>
     </div>
   )
 
-  onClickRetryButton = () => {
+  onClickTryAgainButton = () => {
+    const {userPostsList} = this.state
     this.fetchUserPosts()
+    console.log(userPostsList)
   }
 
   renderUserPosts = () => {

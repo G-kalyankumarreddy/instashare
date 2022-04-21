@@ -55,21 +55,27 @@ class Login extends Component {
         <h1 className="instashare-title">Insta Share</h1>
 
         <form onSubmit={this.onSubmitUserCredentials}>
-          <p className="credentials-description">USERNAME</p>
+          <label htmlFor="username" className="credentials-description">
+            USERNAME
+          </label>
           <input
             className="input-credentials"
             type="text"
             value={username}
             onChange={this.onChangeUserName}
             placeholder="Username"
+            id="username"
           />
-          <p className="credentials-description">PASSWORD</p>
+          <label htmlFor="password" className="credentials-description">
+            PASSWORD
+          </label>
           <input
             className="input-credentials"
             value={password}
             onChange={this.onChangePassword}
             type="password"
             placeholder="Password"
+            id="password"
           />
           {showSubmitError && <p className="error-msg">{errorMsg}</p>}
           <button className="login-button" type="submit">

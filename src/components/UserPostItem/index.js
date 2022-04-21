@@ -53,6 +53,7 @@ const UserPostItem = props => {
               className="like-buttons"
               type="button"
               onClick={onClickLikeIcon}
+              testid="unLikeIcon"
             >
               <FcLike className="like-icon" />
             </button>
@@ -61,6 +62,7 @@ const UserPostItem = props => {
               className="like-buttons"
               type="button"
               onClick={onClickHeartIcon}
+              testid="likeIcon"
             >
               <BsHeart className="heart-icon" />
             </button>
