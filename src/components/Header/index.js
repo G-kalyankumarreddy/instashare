@@ -7,9 +7,46 @@ import {AiFillCloseCircle} from 'react-icons/ai'
 
 import './index.css'
 
+const searchPostsApiConstants = {
+  initial: 'INITIAL',
+  inProgress: 'INPROGRESS',
+  success: 'SUCCESS',
+  failure: 'FAILURE',
+}
+
 class Header extends Component {
   state = {
     displayMenu: false,
+    searchPostsList: [],
+    searchPostsApiStatus: searchPostsApiConstants.initial,
+  }
+
+  getSearchResults = async () => {
+    const {searchInput} = this.props
+    this.setState({searchPostsApiStatus: searchPostsApiConstants.inProgress})
+    const userPostsUrl = `https://apis.ccbp.in/insta-share/posts?search=${searchInput}`
+    const token = Cookies.get('jwt_token')
+    const options = {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+    const response = await fetch(userPostsUrl, options)
+    if (response.ok) {
+      const data = await response.json()
+
+      const updatedPostsDataFormat = data.posts.map(each =>
+        this.updatePostsDataFormat(each),
+      )
+
+      this.setState({
+        searchPostsApiStatus: searchPostsApiConstants.success,
+        searchPostsList: updatedPostsDataFormat,
+      })
+    } else {
+      this.setState({searchPostsApiStatus: searchPostsApiConstants.failure})
+    }
   }
 
   onClickSearchButton = () => {
@@ -25,14 +62,13 @@ class Header extends Component {
   }
 
   optionsListAndSearchInputContainer = () => (
-    <div className="search-input-and-options-list-container">
+    <>
       {this.renderSearchInput()}
       <ul className="header-options-container">
         <Link to="/" className="link-style">
           {' '}
           <li className="options-style">Home</li>
         </Link>
-
         <Link to="/my-profile" className="link-style">
           {' '}
           <li className="options-style">Profile</li>
@@ -48,7 +84,7 @@ class Header extends Component {
           </button>
         </li>
       </ul>
-    </div>
+    </>
   )
 
   onClickMenuIcon = () => {
@@ -70,25 +106,12 @@ class Header extends Component {
     </button>
   )
 
-  onClickSearchButtonSmallDevics = () => {
-    this.setState(prevState => ({displayMenu: !prevState.displayMenu}))
-  }
-
   smallerDevicesMenu = () => (
     <ul className="smaller-devices-header-options-container">
       <Link to="/" className="link-style">
         {' '}
         <li className="options-style">Home</li>
       </Link>
-      <li>
-        <button
-          type="button"
-          className="search-btn-smaller-devices"
-          onClick={this.onClickSearchButtonSmallDevics}
-        >
-          Search
-        </button>
-      </li>
       <Link to="/my-profile" className="link-style">
         {' '}
         <li className="options-style">Profile</li>
@@ -124,34 +147,9 @@ class Header extends Component {
   renderSearchInput = () => {
     const {searchInput} = this.props
     return (
-      <div className="search-input-and-icon-container no-display-small-screens">
+      <div className="search-input-and-icon-container">
         <input
           type="search"
-          className="search-input"
-          value={searchInput}
-          placeholder="Search Caption"
-          onChange={this.onChangeSearchInput}
-        />
-
-        <button
-          className="search-button"
-          type="button"
-          onClick={this.onClickSearchButton}
-          testid="searchIcon"
-        >
-          <FaSearch />
-        </button>
-      </div>
-    )
-  }
-
-  renderSearchInputSmallScreens = () => {
-    const {searchInput} = this.props
-    return (
-      <div className="search-input-and-icon-container-small-screens">
-        <input
-          type="search"
-          className="search-input"
           value={searchInput}
           placeholder="Search Caption"
           onChange={this.onChangeSearchInput}
@@ -187,9 +185,7 @@ class Header extends Component {
           {this.optionsListAndSearchInputContainer()}
           {this.smallerDevicesMenuIcon()}
         </nav>
-        {displayMenu
-          ? this.smallerDevicesMenu()
-          : this.renderSearchInputSmallScreens()}
+        {displayMenu && this.smallerDevicesMenu()}
       </>
     )
   }

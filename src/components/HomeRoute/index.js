@@ -4,7 +4,7 @@ import Loader from 'react-loader-spinner'
 
 import Header from '../Header'
 import UserStories from '../UserStories'
-import UserPosts from '../UserPostsRoute'
+import UserPosts from '../UserPosts'
 import SearchPosts from '../SearchPosts'
 
 import './index.css'
@@ -59,8 +59,10 @@ class Home extends Component {
       },
     }
     const response = await fetch(userPostsUrl, options)
+
     if (response.ok) {
       const data = await response.json()
+      console.log(data)
       const updatedPostsDataFormat = data.posts.map(each =>
         this.updatePostsDataFormat(each),
       )

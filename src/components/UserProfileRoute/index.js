@@ -1,9 +1,8 @@
 import {Component} from 'react'
 import Cookies from 'js-cookie'
+import Loader from 'react-loader-spinner'
 import Header from '../Header'
-import LoaderView from '../Loader'
 import ProfileCard from '../ProfileCard'
-import FailureView from '../FailureView'
 
 const userProfileApiConstants = {
   initial: 'INITIAL',
@@ -89,7 +88,15 @@ class UserProfile extends Component {
   }
 
   userProfileOnFailure = () => (
-    <FailureView>
+    <div className="failure-view-container">
+      <img
+        src="https://res.cloudinary.com/kalyankumar/image/upload/v1650256709/instashare/failureImage_kbieza.png"
+        alt="failure view"
+        className="failure-image"
+      />
+      <p className="failure-view-description">
+        Something went wrong. Please try again
+      </p>
       <button
         type="button"
         className="try-again-button"
@@ -97,14 +104,26 @@ class UserProfile extends Component {
       >
         Try Again
       </button>
-    </FailureView>
+    </div>
+  )
+
+  userProfileOnLoading = () => (
+    <div className="loader-container" testid="loader">
+      <Loader
+        type="TailSpin"
+        className="load-spinner"
+        color="#4094EF"
+        height={50}
+        width={50}
+      />
+    </div>
   )
 
   renderUserProfilePage = () => {
     const {userProfileApiStatus} = this.state
     switch (userProfileApiStatus) {
       case userProfileApiConstants.inProgress:
-        return <LoaderView />
+        return this.userProfileOnLoading()
       case userProfileApiConstants.success:
         return this.userProfileOnSuccess()
       case userProfileApiConstants.failure:

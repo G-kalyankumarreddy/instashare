@@ -169,9 +169,22 @@
 
 .search-input-and-options-list-container {
   display: flex;
-
   width: 50%;
   justify-content: space-between;
+}
+
+.search-input-and-icon-container-small-screens {
+  display: flex;
+  width: 70%;
+  border: 1px solid #dbdbdb;
+  border-radius: 3px;
+  background-color: #fafafa;
+}
+
+@media screen and (min-width: 576px) {
+  .search-input-and-icon-container-small-screens {
+    display: none;
+  }
 }
 
 .search-btn-smaller-devices {
